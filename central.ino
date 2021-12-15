@@ -11,7 +11,7 @@
 const char* ssid = "Central";                       
 const char* password = "AYDTB72JNTQ";               
 unsigned long channelID = 625087;                
-const char* WriteAPIKey = "E1XX7KID63FX2S3R";     
+const char* WriteAPIKey = "D5ILPJV2UPB3X5GB";     
 
 WiFiClient cliente;
 
@@ -19,7 +19,7 @@ DHT dht2(pin2, DHT22);
 Adafruit_BMP280 bmp;
 
 void setup() {
-  Serial.begin(15200);
+  Serial.begin(115200);
   Serial.println("Test de sensores:");
 
   WiFi.begin(ssid,password);
