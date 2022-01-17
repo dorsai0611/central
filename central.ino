@@ -7,6 +7,7 @@
 
 
 #define pin2 32
+const int YL69Pin = 34;
 
 const char* ssid = "Central";                       
 const char* password = "AYDTB72JNTQ";               
@@ -37,16 +38,19 @@ void setup() {
 }
 
 void loop() {
-
-  delay(50000);
+ int lectura = analogRead(A0);
+  delay(5000);
   leerdht2();
 
-  delay(50000);
+  delay(5000);
   leerbmp();
+
+  delay(5000);
+  leerhumedad();
 
   ThingSpeak.writeFields(channelID,WriteAPIKey);
   Serial.println("Datos enviados a ThingSpeak!");
-  delay(34000);
+  delay(3400);
 }
 
 
@@ -77,7 +81,7 @@ void leerdht2() {
 }
 void leerbmp() {
 
-  float presion = bmp.readPressure();
+  float presion = bmp.readPressure()/100;
   float altitud = bmp.readAltitude();
 
   Serial.print("Presión bmp: ");
@@ -94,7 +98,16 @@ void leerbmp() {
   ThingSpeak.setField (4,altitud);
 }
 
-
+void leerhumedad(){
+  // ** YL-69 moisture ***
+  int const readYL69value = analogRead(YL69Pin);
+  // map inversely to 0..10%
+  int const convertedPercentage = map(readYL69value, 4095, 1200, 0, 100);
+  Serial.print("Moisture (YL-69): ");
+  Serial.print(convertedPercentage);
+  Serial.print("%\n");
+    ThingSpeak.setField (5,readYL69value);
+} 
 
 //BMP280
 //Conectar a 3V
@@ -106,3 +119,7 @@ void leerbmp() {
 //DHT22
 //Conectar a 5V
 //El sensor DHT22 conecta al puertoD32
+
+//Sensor humedad del suelo
+//Conectar a 5v
+//El sensor de humedad del suelo al puertoD32
